@@ -1,112 +1,1110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LEGEND MD - WhatsApp Linker</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
-  <style>
-    :root {
-      --primary-color: #000000;
-      --secondary-color: #ffffff;
-      --accent-color: #f0f0f0;
-      --text-color: #000000;
-      --background-color: #ffffff;
-      --hover-color: #f5f5f5;
-      --border-color: rgba(0, 0, 0, 0.1);
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LEGEND MD - WhatsApp Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050510;
+            --bg-card: rgba(10, 10, 30, 0.75);
+            --gold-primary: #f0c060;
+            --gold-bright: #ffd700;
+            --gold-neon: #ffb800;
+            --gold-light: #ffe08a;
+            --gold-dark: #b8860b;
+            --neon-amber: #ff9500;
+            --neon-orange: #ff6a00;
+            --text-primary: #e8e8f0;
+            --text-secondary: #b0b0c8;
+            --text-muted: #7a7a9a;
+            --border-glow: rgba(255, 184, 0, 0.4);
+            --glass-bg: rgba(15, 15, 40, 0.6);
+            --glass-border: rgba(255, 180, 30, 0.25);
+            --glow-strong: 0 0 30px rgba(255, 184, 0, 0.7), 0 0 60px rgba(255, 150, 0, 0.4);
+            --glow-medium: 0 0 20px rgba(255, 184, 0, 0.5), 0 0 40px rgba(255, 150, 0, 0.3);
+            --glow-subtle: 0 0 12px rgba(255, 184, 0, 0.35);
+            --glow-text: 0 0 8px rgba(255, 200, 60, 0.7), 0 0 20px rgba(255, 160, 20, 0.4);
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--background-color);
-      color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-    }
+        body {
+            font-family: 'Inter', 'Rajdhani', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 450px;
-      background: var(--background-color);
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--border-color);
-    }
+        /* ── Particle Canvas ── */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+        /* ── Floating Bubbles ── */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear infinite;
+            opacity: 0;
+            filter: blur(1px);
+        }
 
-    .logo {
-      width: 70px;
-      height: 70px;
-      margin: 0 auto 16px;
-      background: var(--primary-color);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: white;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(110vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.7;
+            }
+            20% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.35;
+            }
+            80% {
+                opacity: 0.15;
+            }
+            95% {
+                opacity: 0.03;
+            }
+            100% {
+                transform: translateY(-15vh) scale(1.4) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
-    .title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--primary-color);
-    }
+        @keyframes driftHorizontal {
+            0%,
+            100% {
+                margin-left: 0;
+            }
+            25% {
+                margin-left: 30px;
+            }
+            50% {
+                margin-left: -20px;
+            }
+            75% {
+                margin-left: 15px;
+            }
+        }
 
-    .subtitle {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.7);
-      margin-bottom: 20px;
-    }
+        /* ── Main Container ── */
+        .container {
+            width: 100%;
+            max-width: 460px;
+            background: var(--glass-bg);
+            border-radius: 24px;
+            padding: 28px 26px 22px;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1.5px solid var(--glass-border);
+            box-shadow:
+                0 0 40px rgba(255, 160, 30, 0.2),
+                0 0 80px rgba(255, 130, 20, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            animation: containerPulse 6s ease-in-out infinite;
+        }
 
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+        @keyframes containerPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(255, 160, 30, 0.2), 0 0 80px rgba(255, 130, 20, 0.1), 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 55px rgba(255, 170, 40, 0.3), 0 0 100px rgba(255, 140, 25, 0.18), 0 20px 60px rgba(0, 0, 0, 0.5);
+            }
+        }
 
-    .social-icons a {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 18px;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
+        /* ── Scan Line Overlay ── */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            pointer-events: none;
+            z-index: 10;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.008) 2px,
+                    rgba(255, 255, 255, 0.008) 4px);
+            animation: scanLines 8s linear infinite;
+        }
 
-    .social-icons a.youtube { background: #FF0000; }
-    .social-icons a.telegram { background: #0088cc; }
-    .social-icons a.whatsapp { background: #0cfa10; }
-    .social-icons a.github { background: #333; }
+        @keyframes scanLines {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 0 60px;
+            }
+        }
 
-    .social-icons a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
+        /* ── Header ── */
+        .header {
+            text-align: center;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+        }
 
-    .toggle-container {
-      display: flex;
+        .logo-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 18px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #1a1a35, #0d0d22);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--gold-bright);
+            position: relative;
+            z-index: 2;
+            border: 2px solid rgba(255, 184, 0, 0.5);
+            box-shadow: var(--glow-strong), inset 0 0 20px rgba(255, 180, 40, 0.15);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(255, 184, 0, 0.7), 0 0 60px rgba(255, 150, 0, 0.4), inset 0 0 20px rgba(255, 180, 40, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 45px rgba(255, 200, 50, 0.9), 0 0 80px rgba(255, 160, 30, 0.55), inset 0 0 30px rgba(255, 190, 50, 0.25);
+            }
+        }
+
+        /* Pulse Rings */
+        .logo-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 184, 0, 0.5);
+            pointer-events: none;
+            animation: ringPulse 2.5s ease-out infinite;
+        }
+        .logo-ring:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+        .logo-ring:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            animation-delay: 0.8s;
+        }
+        .logo-ring:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            animation-delay: 1.6s;
+        }
+
+        @keyframes ringPulse {
+            0% {
+                width: 80px;
+                height: 80px;
+                opacity: 0.9;
+                border-color: rgba(255, 184, 0, 0.7);
+            }
+            100% {
+                width: 150px;
+                height: 150px;
+                opacity: 0;
+                border-color: rgba(255, 184, 0, 0);
+            }
+        }
+
+        .title {
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+            background: linear-gradient(180deg,
+                    #ffe9a0 0%,
+                    #ffc840 25%,
+                    #ffb800 40%,
+                    #e6a000 60%,
+                    #c78a00 80%,
+                    #ffd060 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 12px rgba(255, 180, 30, 0.7));
+            animation: textShimmer 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes textShimmer {
+            0%,
+            100% {
+                filter: drop-shadow(0 0 12px rgba(255, 180, 30, 0.7));
+            }
+            50% {
+                filter: drop-shadow(0 0 22px rgba(255, 200, 50, 1));
+            }
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Social Icons ── */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .social-icons a {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            background: rgba(20, 20, 45, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .social-icons a::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            z-index: -1;
+        }
+        .social-icons a.youtube {
+            color: #ff5555;
+            border-color: rgba(255, 80, 80, 0.35);
+        }
+        .social-icons a.youtube::after {
+            box-shadow: 0 0 20px rgba(255, 50, 50, 0.6);
+        }
+        .social-icons a.telegram {
+            color: #4da8da;
+            border-color: rgba(70, 160, 220, 0.35);
+        }
+        .social-icons a.telegram::after {
+            box-shadow: 0 0 20px rgba(60, 150, 210, 0.6);
+        }
+        .social-icons a.whatsapp {
+            color: #4cfa50;
+            border-color: rgba(60, 240, 70, 0.35);
+        }
+        .social-icons a.whatsapp::after {
+            box-shadow: 0 0 20px rgba(40, 230, 50, 0.6);
+        }
+        .social-icons a.github {
+            color: #c0c0d0;
+            border-color: rgba(180, 180, 200, 0.35);
+        }
+        .social-icons a.github::after {
+            box-shadow: 0 0 20px rgba(160, 160, 190, 0.5);
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-4px) scale(1.08);
+            border-color: transparent;
+        }
+        .social-icons a:hover::after {
+            opacity: 1;
+        }
+        .social-icons a.youtube:hover {
+            background: #ff2020;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(255, 40, 40, 0.7);
+        }
+        .social-icons a.telegram:hover {
+            background: #1d9bdb;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(30, 150, 210, 0.7);
+        }
+        .social-icons a.whatsapp:hover {
+            background: #1fce25;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(30, 200, 40, 0.7);
+        }
+        .social-icons a.github:hover {
+            background: #555;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(140, 140, 170, 0.6);
+        }
+
+        /* ── Toggle ── */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: rgba(20, 20, 45, 0.6);
+            border-radius: 14px;
+            padding: 5px;
+            border: 1px solid rgba(255, 180, 40, 0.2);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(8px);
+        }
+
+        .toggle-option {
+            flex: 1;
+            padding: 11px 16px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            font-family: 'Rajdhani', sans-serif;
+            color: #8888aa;
+        }
+
+        .toggle-option.active {
+            background: linear-gradient(145deg, #1a1a38, #0d0d26);
+            color: var(--gold-bright);
+            box-shadow: var(--glow-subtle), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 180, 40, 0.4);
+            text-shadow: 0 0 8px rgba(255, 200, 60, 0.5);
+        }
+
+        .toggle-option:not(.active):hover {
+            color: #ccc;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* ── Input ── */
+        .input-group {
+            margin-bottom: 18px;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+        .input-group.hidden {
+            display: none;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid rgba(255, 180, 40, 0.25);
+            border-radius: 14px;
+            background: rgba(15, 15, 38, 0.7);
+            color: #e8e8f0;
+            font-size: 15px;
+            font-family: 'Inter', 'Rajdhani', sans-serif;
+            letter-spacing: 0.5px;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(6px);
+            outline: none;
+        }
+        .input-field::placeholder {
+            color: #5a5a78;
+            letter-spacing: 0.5px;
+        }
+        .input-field:focus {
+            border-color: var(--gold-neon);
+            box-shadow: 0 0 20px rgba(255, 170, 30, 0.3), 0 0 0 4px rgba(255, 170, 30, 0.06);
+            background: rgba(18, 18, 44, 0.85);
+        }
+
+        /* ── Generate Button ── */
+        .generate-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(145deg, #1f1f42, #111130);
+            border: 1.5px solid rgba(255, 180, 40, 0.45);
+            border-radius: 14px;
+            color: var(--gold-bright);
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            overflow: hidden;
+            box-shadow: 0 0 18px rgba(255, 170, 30, 0.25);
+        }
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg,
+                    transparent,
+                    rgba(255, 200, 60, 0.08),
+                    transparent,
+                    rgba(255, 180, 40, 0.05),
+                    transparent);
+            animation: btnShine 4s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes btnShine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(255, 180, 40, 0.55), 0 8px 30px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 200, 60, 0.7);
+            color: #ffe8a0;
+            text-shadow: 0 0 12px rgba(255, 200, 50, 0.6);
+        }
+        .generate-btn:active {
+            transform: scale(0.97);
+            transition: transform 0.1s ease;
+        }
+        .generate-btn.hidden {
+            display: none;
+        }
+
+        /* ── Loading Spinner ── */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 14px 0;
+            position: relative;
+            z-index: 2;
+        }
+        .loading i {
+            font-size: 28px;
+            color: var(--gold-bright);
+            animation: spin 0.8s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 180, 30, 0.7));
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Code Display ── */
+        .code-display {
+            background: rgba(15, 15, 38, 0.65);
+            padding: 14px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid rgba(255, 180, 40, 0.3);
+            color: #ddd;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(6px);
+            font-family: 'Rajdhani', 'Orbitron', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        /* ── QR Display ── */
+        .qr-display {
+            background: rgba(15, 15, 38, 0.65);
+            padding: 28px 20px;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 14px;
+            border: 1.5px solid rgba(255, 180, 40, 0.3);
+            display: none;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(6px);
+        }
+        .qr-image {
+            max-width: 260px;
+            max-height: 260px;
+            margin: 0 auto 18px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(255, 170, 30, 0.35), 0 8px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 180, 40, 0.3);
+            display: block;
+        }
+        .qr-instructions {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Success / Error ── */
+        .success-message {
+            color: #5eff8a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(80, 255, 130, 0.5);
+            animation: fadeInUp 0.4s ease;
+        }
+        .error-message {
+            color: #ff5c5c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(255, 80, 80, 0.4);
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Copy Button ── */
+        .copy-btn {
+            width: 100%;
+            padding: 13px;
+            background: rgba(20, 20, 45, 0.55);
+            border: 1.5px solid rgba(255, 180, 40, 0.3);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #c8c8e0;
+            transition: all 0.35s ease;
+            position: relative;
+            z-index: 2;
+            font-family: 'Rajdhani', sans-serif;
+            backdrop-filter: blur(6px);
+        }
+        .copy-btn:hover {
+            background: rgba(30, 30, 55, 0.7);
+            border-color: rgba(255, 190, 50, 0.6);
+            color: #ffe8a0;
+            box-shadow: 0 0 22px rgba(255, 170, 30, 0.35);
+            text-shadow: 0 0 6px rgba(255, 200, 50, 0.4);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: rgba(180, 180, 210, 0.45);
+            position: relative;
+            z-index: 2;
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .container {
+                padding: 22px 16px 18px;
+                border-radius: 20px;
+                max-width: 390px;
+            }
+            .code-display {
+                font-size: 15px;
+                min-height: 48px;
+                letter-spacing: 1px;
+            }
+            .qr-image {
+                max-width: 210px;
+                max-height: 210px;
+            }
+            .qr-display {
+                padding: 20px 14px;
+            }
+            .title {
+                font-size: 24px;
+                letter-spacing: 2px;
+            }
+            .logo {
+                width: 66px;
+                height: 66px;
+                font-size: 26px;
+            }
+            .logo-ring {
+                animation: ringPulseSmall 2.5s ease-out infinite;
+            }
+        }
+        @keyframes ringPulseSmall {
+            0% {
+                width: 66px;
+                height: 66px;
+                opacity: 0.9;
+            }
+            100% {
+                width: 125px;
+                height: 125px;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Floating Bubbles injected by JS -->
+
+    <div class="container">
+        <div class="header">
+            <div class="logo-wrapper">
+                <div class="logo-ring"></div>
+                <div class="logo-ring"></div>
+                <div class="logo-ring"></div>
+                <div class="logo"><i class="fas fa-robot"></i></div>
+            </div>
+            <h1 class="title">LEGEND MD</h1>
+            <p class="subtitle">⚡ Link your WhatsApp device ⚡</p>
+            <div class="social-icons">
+                <a href="https://youtube.com/@waseem-modz-official?si=g3RMgTbcXcA5VxAg?sub_confirmation=1" target="_blank" class="youtube"><i class="fab fa-youtube"></i></a>
+                <a href="telegram.me/waseemtech96" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
+                <a href="https://whatsapp.com/channel/0029Vb6FgVQEVccBswSu271t" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://github.com/LeGenDX96/LEGEND-MD" target="_blank" class="github"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle-option active" data-mode="pair">
+                <i class="fas fa-key"></i> Pair Code
+            </div>
+            <div class="toggle-option" data-mode="qr">
+                <i class="fas fa-qrcode"></i> QR Code
+            </div>
+        </div>
+
+        <div class="input-group" id="inputGroup">
+            <label class="input-label">Enter your WhatsApp number with country code</label>
+            <input type="text" id="mobileNumber" class="input-field" placeholder="+923447861706" pattern="[+][0-9]{10,}" title="Please enter country code starting with + followed by number">
+        </div>
+
+        <button class="generate-btn" id="submit">
+            <i class="fas fa-key"></i> Generate Pair Code
+        </button>
+
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner"></i>
+        </div>
+
+        <div class="code-display" id="codeDisplay">
+            Your pair code will appear here
+        </div>
+
+        <div class="qr-display" id="qrDisplay">
+            <img id="qrImage" class="qr-image" src="" alt="QR Code">
+            <div class="qr-instructions" id="qrInstructions">
+                Scan this QR code with your WhatsApp app
+            </div>
+        </div>
+
+        <button class="copy-btn" id="copy" onclick="copyCode()">
+            <i class="fas fa-copy"></i> Copy Code
+        </button>
+
+        <div class="footer">
+            <p>© 2026 LEGEND MD</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js">
+    </script>
+    <script>
+        // ────────────────────────────────────
+        //  PARTICLE CANVAS
+        // ────────────────────────────────────
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 90;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.6;
+                this.speedX = (Math.random() - 0.5) * 0.55;
+                this.speedY = (Math.random() - 0.5) * 0.55;
+                this.opacity = Math.random() * 0.7 + 0.15;
+                this.pulseSpeed = Math.random() * 0.015 + 0.005;
+                this.pulseOffset = Math.random() * Math.PI * 2;
+                this.hue = Math.random() < 0.65 ?
+                    (Math.random() * 20 + 35) :
+                    (Math.random() * 30 + 190);
+                this.golden = Math.random() < 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < -20) this.x = canvas.width + 20;
+                if (this.x > canvas.width + 20) this.x = -20;
+                if (this.y < -20) this.y = canvas.height + 20;
+                if (this.y > canvas.height + 20) this.y = -20;
+                this.currentOpacity = this.opacity * (0.6 + 0.4 * Math.sin(Date.now() * this
+                    .pulseSpeed + this.pulseOffset));
+            }
+            draw() {
+                ctx.beginPath();
+                const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 3.5);
+                if (this.golden) {
+                    glow.addColorStop(0, `rgba(255,190,50,${this.currentOpacity})`);
+                    glow.addColorStop(0.4, `rgba(255,160,30,${this.currentOpacity * 0.5})`);
+                    glow.addColorStop(1, 'rgba(255,140,20,0)');
+                } else {
+                    glow.addColorStop(0, `rgba(180,200,255,${this.currentOpacity})`);
+                    glow.addColorStop(0.4, `rgba(140,160,230,${this.currentOpacity * 0.4})`);
+                    glow.addColorStop(1, 'rgba(100,130,210,0)');
+                }
+                ctx.fillStyle = glow;
+                ctx.arc(this.x, this.y, this.size * 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.golden ?
+                    `rgba(255,210,80,${this.currentOpacity + 0.15})` :
+                    `rgba(200,215,255,${this.currentOpacity + 0.1})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const maxDist = 130;
+                    if (dist < maxDist) {
+                        const alpha = (1 - dist / maxDist) * 0.18;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = particles[i].golden || particles[j].golden ?
+                            `rgba(255,180,50,${alpha})` :
+                            `rgba(160,185,230,${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ────────────────────────────────────
+        //  FLOATING BUBBLES
+        // ────────────────────────────────────
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = Math.random() * 50 + 18;
+            const colors = [
+                'rgba(255,190,50,0.22)',
+                'rgba(255,160,30,0.18)',
+                'rgba(255,210,70,0.2)',
+                'rgba(255,140,20,0.15)',
+                'rgba(200,180,255,0.14)',
+                'rgba(180,200,255,0.12)',
+                'rgba(255,200,80,0.16)',
+            ];
+            bubble.style.width = size + 'px';
+            bubble.style.height = size + 'px';
+            bubble.style.left = Math.random() * 95 + '%';
+            bubble.style.bottom = '-60px';
+            bubble.style.background = `radial-gradient(circle at 35% 35%, ${colors[Math.floor(Math.random()*colors.length)]}, transparent 70%)`;
+            bubble.style.boxShadow = Math.random() < 0.4 ?
+                '0 0 18px rgba(255,170,30,0.3)' :
+                '0 0 14px rgba(160,180,230,0.2)';
+            bubble.style.animationDuration = (Math.random() * 14 + 10) + 's';
+            bubble.style.animationDelay = '0s';
+            if (Math.random() < 0.5) {
+                bubble.style.animationName = 'floatUp, driftHorizontal';
+                bubble.style.animationDuration = (Math.random() * 14 + 10) + 's, ' + (Math.random() * 8 + 6) +
+                    's';
+            }
+            document.body.appendChild(bubble);
+            setTimeout(() => {
+                if (bubble.parentNode) bubble.parentNode.removeChild(bubble);
+            }, parseFloat(bubble.style.animationDuration.split(',')[0]) * 1000 + 2000);
+        }
+
+        function spawnBubbles() {
+            setInterval(() => {
+                if (document.body.querySelectorAll('.bubble').length < 22) {
+                    createBubble();
+                }
+            }, 1800);
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => createBubble(), i * 500);
+            }
+        }
+        spawnBubbles();
+
+        // ────────────────────────────────────
+        //  TOGGLE & LOGIC (unchanged)
+        // ────────────────────────────────────
+        let currentMode = 'pair';
+
+        document.querySelectorAll('.toggle-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const mode = this.dataset.mode;
+                if (mode === currentMode) return;
+
+                document.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove(
+                    'active'));
+                this.classList.add('active');
+
+                currentMode = mode;
+
+                const submitBtn = document.getElementById('submit');
+                const inputGroup = document.getElementById('inputGroup');
+
+                if (mode === 'pair') {
+                    submitBtn.innerHTML = '<i class="fas fa-key"></i> Generate Pair Code';
+                    submitBtn.classList.remove('hidden');
+                    inputGroup.classList.remove('hidden');
+                } else {
+                    submitBtn.classList.add('hidden');
+                    inputGroup.classList.add('hidden');
+                    generateQRCode();
+                }
+
+                document.getElementById('codeDisplay').innerHTML = 'Your pair code will appear here';
+                document.getElementById('codeDisplay').className = 'code-display';
+                document.getElementById('qrDisplay').style.display = 'none';
+                document.getElementById('codeDisplay').style.display = 'flex';
+            });
+        });
+
+        async function generateQRCode() {
+            const codeDisplay = document.getElementById("codeDisplay");
+            const qrDisplay = document.getElementById("qrDisplay");
+            const loadingSpinner = document.getElementById("loading");
+
+            loadingSpinner.style.display = "block";
+            codeDisplay.innerHTML = '';
+            codeDisplay.className = 'code-display';
+            qrDisplay.style.display = 'none';
+
+            try {
+                const response = await axios('/qr');
+
+                if (response.data.qr) {
+                    document.getElementById('qrImage').src = response.data.qr;
+                    document.getElementById('qrInstructions').innerHTML = response.data.instructions.join('<br>');
+                    qrDisplay.style.display = 'block';
+                    codeDisplay.style.display = 'none';
+                } else {
+                    codeDisplay.innerHTML =
+                        '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Failed to generate QR code</div>';
+                    codeDisplay.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error("Error generating QR code:", error);
+                codeDisplay.innerHTML =
+                    '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Error generating QR code. Please try again.</div>';
+                codeDisplay.style.display = 'flex';
+            } finally {
+                loadingSpinner.style.display = "none";
+            }
+        }
+
+        document.getElementById("submit").addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const mobileNumberInput = document.getElementById("mobileNumber");
+            const codeDisplay = document.getElementById("codeDisplay");
+            const qrDisplay = document.getElementById("qrDisplay");
+            const loadingSpinner = document.getElementById("loading");
+
+            const mobileNumber = mobileNumberInput.value.trim();
+            if (!mobileNumber) {
+                codeDisplay.innerHTML =
+                    '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Please enter your WhatsApp number</div>';
+                codeDisplay.className = 'code-display';
+                return;
+            }
+
+            loadingSpinner.style.display = "block";
+            codeDisplay.innerHTML = '';
+            codeDisplay.className = 'code-display';
+            qrDisplay.style.display = 'none';
+
+            try {
+                const response = await axios(`/pair?number=${mobileNumber.replace(/[^0-9]/g, "")}`);
+
+                const code = response.data.code || "Service Unavailable";
+                if (code === "Service Unavailable") {
+                    codeDisplay.innerHTML =
+                        '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Service Unavailable</div>';
+                } else {
+                    codeDisplay.innerHTML =
+                        `<div class="success-message"><i class="fas fa-check-circle"></i> CODE: ${code}</div>`;
+                }
+                codeDisplay.style.display = 'flex';
+            } catch (error) {
+                console.error("Error generating code:", error);
+                codeDisplay.innerHTML =
+                    '<div class="error-message"><i class="fas fa-exclamation-circle"></i> Error generating code. Please try again.</div>';
+                codeDisplay.style.display = 'flex';
+            } finally {
+                loadingSpinner.style.display = "none";
+            }
+        });
+
+        function copyCode() {
+            const codeDisplay = document.getElementById("codeDisplay").innerText;
+            const code = codeDisplay.replace('CODE: ', '').replace('Your pair code will appear here', '').trim();
+            if (!code) return;
+            navigator.clipboard.writeText(code).then(() => {
+                const copyBtn = document.getElementById("copy");
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyBtn.style.color = '#5eff8a';
+                copyBtn.style.borderColor = 'rgba(80,255,130,0.6)';
+                copyBtn.style.boxShadow = '0 0 20px rgba(80,255,140,0.4)';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.color = '#c8c8e0';
+                    copyBtn.style.borderColor = 'rgba(255,180,40,0.3)';
+                    copyBtn.style.boxShadow = 'none';
+                }, 2000);
+            }).catch(err => {
+                console.error("Failed to copy text: ", err);
+            });
+        }
+    </script>
+</body>
+</html>      display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
